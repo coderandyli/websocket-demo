@@ -34,7 +34,6 @@ public class MessageController {
     @Autowired
     private SimpMessageSendingOperations simpMessageSendingOperations;
 
-
     /**
      * 点对点发送消息，将消息发送到指定用户
      */
