@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -22,15 +23,13 @@ public class SysMsgController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
-     * 广播系统消息 to everyone
+     * 广播系统通知 to everyone
      */
     @ResponseBody
     @PostMapping("/sys-msg/send")
-    public void sendSysNoti() {
-        WebSocketChatMessage webSocketChatMessage = new WebSocketChatMessage();
+    public void sendSysNoti(@RequestBody WebSocketChatMessage webSocketChatMessage) {
         webSocketChatMessage.setSender("sys");
         webSocketChatMessage.setType("message-data");
-        webSocketChatMessage.setContent("夜深了，天凉了，注意盖好被子...");
         simpMessagingTemplate.convertAndSend("/topic/javainuse", webSocketChatMessage);
     }
 }
