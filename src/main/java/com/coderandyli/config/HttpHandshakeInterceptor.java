@@ -1,6 +1,5 @@
 package com.coderandyli.config;
 
-import com.coderandyli.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -31,12 +30,14 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
-//        // 将 request 对象转换为 ServletServerHttpRequest 对象
-//        ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
-//        // 获取 HTTP Session 对象
-//        HttpSession session = serverRequest.getServletRequest().getSession();
-//        if (session != null) {
-//            // 从 HTTP Session 中获取用户信息
+        log.info("【握手请求拦截器】HttpHandshakeInterceptor#beforeHandshake");
+
+        // 将 request 对象转换为 ServletServerHttpRequest 对象
+        ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
+        // 获取 HTTP Session 对象
+        HttpSession session = serverRequest.getServletRequest().getSession();
+        if (session != null) {
+            // 从 HTTP Session 中获取用户信息
 //            User user = (User) session.getAttribute("user");
 //            if (user != null) {
 //                // 将从 HTTP Session 中获取的用户信息存入 WebSocket 的 Attributes 对象中
@@ -44,9 +45,8 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
 //                // 继续握手
 //                return true;
 //            }
-//        }
-//        // 终止握手
-//        return false;
+        }
+        // 终止握手
         return true;
     }
 
@@ -61,7 +61,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                WebSocketHandler wsHandler, Exception ex) {
-        log.info("完成握手");
+        log.info("【握手请求拦截器】HttpHandshakeInterceptor#afterHandshake  完成握手");
     }
 
 }

@@ -10,15 +10,13 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecoratorFactory;
 
 /**
  * WebSocket 处理器，用于处理握手前后阶段
- *
- * @author mydlq
+ * WebSocketHandler Decoration （WebSocket处理器的装饰者）
  */
 @Slf4j
 @Configuration
 public class HttpWebSocketHandlerDecoratorFactory implements WebSocketHandlerDecoratorFactory {
-
     /**
-     * WebSocketHandler Decoration（配置 webSocket 处理器）
+     * 配置 webSocket 处理器
      *
      * @param webSocketHandler webSocket 处理器
      * @return webSocket 处理器
@@ -27,30 +25,32 @@ public class HttpWebSocketHandlerDecoratorFactory implements WebSocketHandlerDec
     public WebSocketHandler decorate(WebSocketHandler webSocketHandler) {
         return new WebSocketHandlerDecorator(webSocketHandler) {
             /**
-             * websocket 连接时执行的动作
+             * websocket 建立连接后执行的动作
+             *
              * @param session    websocket session 对象
              * @throws Exception 异常对象
              */
             @Override
             public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
+                log.info("【WebSocket处理器装饰者】HttpWebSocketHandlerDecoratorFactory#afterConnectionEstablished");
+
                 // 输出进行 websocket 连接的用户信息
                 if (session.getPrincipal() != null) {
                     String username = session.getPrincipal().getName();
                     log.info("用户:" + username + "上线");
-
-                    log.info("session.toString() = {}", session.toString());
                     super.afterConnectionEstablished(session);
                 }
             }
 
             /**
-             * websocket 关闭连接时执行的动作
+             * websocket 关闭连接后执行的动作
              * @param session websocket session 对象
              * @param closeStatus 关闭状态对象
              * @throws Exception 异常对象
              */
             @Override
             public void afterConnectionClosed(final WebSocketSession session, CloseStatus closeStatus) throws Exception {
+                log.info("【WebSocket处理器装饰者】HttpWebSocketHandlerDecoratorFactory#afterConnectionClosed");
                 // 输出关闭 websocket 连接的用户信息
                 if (session.getPrincipal() != null) {
                     String username = session.getPrincipal().getName();
@@ -60,5 +60,6 @@ public class HttpWebSocketHandlerDecoratorFactory implements WebSocketHandlerDec
             }
         };
     }
+
 
 }

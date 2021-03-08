@@ -1,15 +1,11 @@
 package com.coderandyli.config;
 
-import com.coderandyli.model.User;
+import com.coderandyli.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
-import org.springframework.web.socket.sockjs.support.AbstractSockJsService;
-import org.springframework.web.socket.sockjs.transport.TransportType;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Map;
 
@@ -18,6 +14,7 @@ import java.util.Map;
  *
  * @author mydlq
  */
+@Slf4j
 public class HttpHandshakeHandler extends DefaultHandshakeHandler {
 
     /**
@@ -30,21 +27,12 @@ public class HttpHandshakeHandler extends DefaultHandshakeHandler {
      */
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-        User user = fetchUser(request);
-        return user::getUsername;
+      log.info("【握手处理器】 HttpHandshakeHandler#determineUser");
+//        User user = (User) attributes.get("user");
+//        return user::getName;
+        User user = new User();
+        user.setUserName("0011");
+        return user::getUserName;
     }
 
-    /**
-     * 从Session中获取用户信息
-     *
-     * @param request
-     * @return
-     */
-    private User fetchUser(ServerHttpRequest request) {
-        ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
-        // 获取 HTTP Session 对象
-        HttpSession session = serverRequest.getServletRequest().getSession();
-        // 从 HTTP Session 中获取用户信息
-        return (User) session.getAttribute("user");
-    }
 }
