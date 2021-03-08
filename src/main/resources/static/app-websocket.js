@@ -4,9 +4,9 @@ var stompClient = null;
 // 设置 WebSocket 进入端点
 var SOCKET_ENDPOINT = "/ad-websocket";
 // 设置订阅地址
-var SUBSCRIBE = "/queue/abc";
+var SUBSCRIBE = "/queue/resp";
 // 设置服务器端点，访问服务器中哪个接口
-var SEND_ENDPOINT = "/app/send-msg";
+var SEND_ENDPOINT = "/app/msg/send";
 
 /* 进行连接 */
 function connect() {

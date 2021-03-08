@@ -1,5 +1,6 @@
 package com.coderandyli.controller;
 
+import com.coderandyli.constant.DestinationConstant;
 import com.coderandyli.model.MessageBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.boot.SpringBootVersion;
 import org.springframework.core.SpringVersion;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -26,30 +28,25 @@ import java.security.Principal;
 @Slf4j
 @Controller
 public class MessageController {
-    /**
-     * 广播转发地址
-     */
-    private static final String DESTINATION_ABC = "/queue/abc";
 
     @Autowired
     private SimpMessageSendingOperations simpMessageSendingOperations;
 
-
     /**
      * 点对点发送消息，将消息发送到指定用户
      */
-    // @SendToUser("/topic/*")
-    @MessageMapping("/send-msg")
+    @MessageMapping("/msg/send")
     public void sendUserMessage(Principal principal, MessageBody messageBody) {
         messageBody.setFrom(principal.getName());
-        simpMessageSendingOperations.convertAndSendToUser(messageBody.getTargetUser(), DESTINATION_ABC, messageBody);
+        simpMessageSendingOperations.convertAndSendToUser(messageBody.getTargetUser(), DestinationConstant.QUEUE_DESTINATION, messageBody);
     }
 
-
-
-    public static void main(String[] args) {
-        // WebSocketHandlerDecorator
-        log.info("spirng version is 【{}】, spring boot version is 【{}】", SpringVersion.getVersion(), SpringBootVersion.getVersion());
+    @MessageExceptionHandler
+    @SendToUser("/queue/errors")
+    public String handleException(Throwable exception) {
+        log.error("【Error handling message】{}", exception.getMessage());
+        return exception.getMessage();
     }
+
 
 }
