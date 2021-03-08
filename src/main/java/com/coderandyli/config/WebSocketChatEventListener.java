@@ -3,7 +3,7 @@ package com.coderandyli.config;
 import com.coderandyli.domain.WebSocketChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
@@ -19,7 +19,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class WebSocketChatEventListener {
     @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * STOMP会话已完全建立【事件】
@@ -49,7 +49,7 @@ public class WebSocketChatEventListener {
             chatMessage.setType("Leave");
             chatMessage.setSender(username);
 //            messagingTemplate.convertAndSend("/topic/public", chatMessage);
-            messagingTemplate.convertAndSend("/topic/javainuse", chatMessage);
+            simpMessagingTemplate.convertAndSend("/topic/javainuse", chatMessage);
         }
     }
 }

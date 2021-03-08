@@ -4,6 +4,7 @@ import com.coderandyli.domain.WebSocketChatMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SysMsgController {
 
     @Autowired
-    private SimpMessageSendingOperations simpMessageSendingOperations;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * 广播系统消息 to everyone
@@ -30,6 +31,6 @@ public class SysMsgController {
         webSocketChatMessage.setSender("sys");
         webSocketChatMessage.setType("message-data");
         webSocketChatMessage.setContent("夜深了，天凉了，注意盖好被子...");
-        simpMessageSendingOperations.convertAndSend("/topic/javainuse", webSocketChatMessage);
+        simpMessagingTemplate.convertAndSend("/topic/javainuse", webSocketChatMessage);
     }
 }
