@@ -1,6 +1,7 @@
 package com.coderandyli.config;
 
 import com.coderandyli.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
@@ -18,6 +19,7 @@ import java.util.Map;
  *
  * @author mydlq
  */
+@Slf4j
 public class HttpHandshakeHandler extends DefaultHandshakeHandler {
 
     /**
@@ -30,21 +32,7 @@ public class HttpHandshakeHandler extends DefaultHandshakeHandler {
      */
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-        User user = fetchUser(request);
-        return user::getUsername;
-    }
-
-    /**
-     * 从Session中获取用户信息
-     *
-     * @param request
-     * @return
-     */
-    private User fetchUser(ServerHttpRequest request) {
-        ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
-        // 获取 HTTP Session 对象
-        HttpSession session = serverRequest.getServletRequest().getSession();
-        // 从 HTTP Session 中获取用户信息
-        return (User) session.getAttribute("user");
+        log.info("exec HttpHandshakeHandler#determineUser...");
+        return super.determineUser(request, wsHandler, attributes);
     }
 }

@@ -15,7 +15,7 @@ function connect() {
     // 配置 STOMP 客户端
     stompClient = Stomp.over(socket);
     // STOMP 客户端连接
-    stompClient.connect({}, function (frame) {
+    stompClient.connect({'Auth-Token': '112233'}, function (frame) {
         alert("连接成功");
     });
 }

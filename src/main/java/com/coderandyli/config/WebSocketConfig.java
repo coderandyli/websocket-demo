@@ -52,15 +52,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
-    /**
-     * 与处理从 WebSocket 客户端接收和发送到 WebSocket 的消息相关的配置选项。
-     *
-     * @param registry STOMP 端点
-     */
-    @Override
-    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
-        registry.addDecoratorFactory(new HttpWebSocketHandlerDecoratorFactory());
-    }
+//    /**
+//     * 与处理从 WebSocket 客户端接收和发送到 WebSocket 的消息相关的配置选项。
+//     *
+//     * @param registry STOMP 端点
+//     */
+//    @Override
+//    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+//        registry.addDecoratorFactory(new HttpWebSocketHandlerDecoratorFactory());
+//    }
 
 
     /**
@@ -69,18 +69,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(createUserInterceptor());
-
-    }
-
-    @Override
-    public void configureClientOutboundChannel(ChannelRegistration registration) {
-        registration.interceptors(createUserInterceptor());
     }
 
     /*将客户端渠道拦截器加入spring ioc容器*/
     @Bean
-    public UserInterceptor createUserInterceptor() {
-        return new UserInterceptor();
+    public UserAuthenticationInterceptor createUserInterceptor() {
+        return new UserAuthenticationInterceptor();
     }
 
 }

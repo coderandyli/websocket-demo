@@ -31,22 +31,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
-//        // 将 request 对象转换为 ServletServerHttpRequest 对象
-//        ServletServerHttpRequest serverRequest = (ServletServerHttpRequest) request;
-//        // 获取 HTTP Session 对象
-//        HttpSession session = serverRequest.getServletRequest().getSession();
-//        if (session != null) {
-//            // 从 HTTP Session 中获取用户信息
-//            User user = (User) session.getAttribute("user");
-//            if (user != null) {
-//                // 将从 HTTP Session 中获取的用户信息存入 WebSocket 的 Attributes 对象中
-//                attributes.put("user", user);
-//                // 继续握手
-//                return true;
-//            }
-//        }
-//        // 终止握手
-//        return false;
+        log.info("exec HttpHandshakeInterceptor#beforeHandshake...");
         return true;
     }
 
@@ -61,7 +46,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                WebSocketHandler wsHandler, Exception ex) {
-        log.info("完成握手");
+        log.info("exec HttpHandshakeInterceptor#afterHandshake...");
     }
 
 }
